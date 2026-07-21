@@ -1,0 +1,32 @@
+services:
+  - type: web
+    name: caresignal-api
+    runtime: python
+    plan: free
+    buildCommand: pip install -e apps/api
+    startCommand: uvicorn app.main:app --app-dir apps/api --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/v1/health
+    envVars:
+      - key: CARESIGNAL_ENV
+        value: demo
+      - key: CARESIGNAL_AUTO_BOOTSTRAP
+        value: "true"
+      - key: CARESIGNAL_DEMO_RESET_ENABLED
+        value: "true"
+      - key: CARESIGNAL_DEMO_RESET_TOKEN
+        generateValue: true
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: WHATSAPP_CLOUD_API_ENABLED
+        value: "false"
+
+  - type: web
+    name: caresignal-web
+    runtime: node
+    plan: free
+    buildCommand: npm ci && npm run build:web
+    startCommand: npm run start --workspace @caresignal/web -- --hostname 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
+    envVars:
+      - key: CARESIGNAL_API_URL
+        value: http://caresignal-api:10000/api/v1

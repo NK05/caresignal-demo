@@ -1,0 +1,23 @@
+{
+  "name": "caresignal",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "npm@11.9.0",
+  "workspaces": [
+    "apps/web"
+  ],
+  "scripts": {
+    "dev:web": "npm run dev --workspace @caresignal/web",
+    "build:web": "npm run build --workspace @caresignal/web",
+    "lint:web": "npm run lint --workspace @caresignal/web",
+    "test:web": "npm run test --workspace @caresignal/web",
+    "test:e2e": "playwright test",
+    "check:web": "npm run lint:web && npm run test:web && npm run build:web"
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.61.1"
+  }
+}
